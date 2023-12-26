@@ -11,35 +11,33 @@ class StopwatchesController < ApplicationController
     else
       render json: { status: 'error', message: 'Failed to save time' }
     end
-
-    end
+  end
     
-    def index
-      @times = Stopwatch.all
-      respond_to do |format|
+  def index
+    @times = Stopwatch.all
+    respond_to do |format|
       format.html
       format.json { render json: @times }
     end
-      end
+  end
+
+  def update
+    @time = Stopwatch.find(params[:id]) # 特定のタイムレコードを取得
     
-    def update
-      @time = Stopwatch.find(params[:id]) # 特定のタイムレコードを取得
-    
-      if @time.update(stopwatch_params)
-        redirect_to stopwatches_path, notice: 'Time record was successfully updated.'
-      else
-        render :edit
-      end
+    if @time.update(stopwatch_params)
+      redirect_to stopwatches_path, notice: 'Time record was successfully updated.'
+    else
+      render :edit
     end
+  end
   
-    private
+  private
   
-    def set_stopwatch
-      @stopwatch = Stopwatch.find(params[:id])
-    end
+  def set_stopwatch
+    @stopwatch = Stopwatch.find(params[:id])
+  end
   
-    def stopwatch_params
-      params.require(:stopwatch).permit(:hours, :minutes, :seconds) 
-    end
+  def stopwatch_params
+    params.require(:stopwatch).permit(:hours, :minutes, :seconds) 
   end
 end
